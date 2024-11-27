@@ -1,0 +1,1 @@
+from service.consultation_company.agents.translator import translator
