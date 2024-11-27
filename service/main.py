@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uuid
+from mangum import Mangum
 
 from service.consultation_company.agents import translator
 
@@ -13,6 +14,8 @@ app.add_middleware(
   allow_headers=["*"],
   allow_methods=["*"]
 )
+
+handler = Mangum(app)
 
 @app.get("/")
 async def get():

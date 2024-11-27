@@ -6,3 +6,4 @@ tests/*
 scripts/*
 ffx-consultant/*
 service/consultation_company/agents/bak/*
+service/__pycache__/*
