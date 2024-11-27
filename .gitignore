@@ -1,0 +1,8 @@
+.env
+.vscode
+*pycache*
+langgraph-course-9c8529a52e6b.json
+tests/*
+scripts/*
+ffx-consultant/*
+service/consultation_company/agents/bak/*
