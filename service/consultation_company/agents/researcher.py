@@ -1,4 +1,3 @@
-
 # %%
 from dotenv import load_dotenv
 
@@ -13,6 +12,10 @@ from langchain_core.tools import tool
 from langgraph.graph import add_messages, StateGraph, START, END
 from langgraph.constants import Send
 from langchain_community.tools import DuckDuckGoSearchResults
+from langchain_pinecone import PineconeVectorStore
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+
+import os
 
 # from vectorstores import MyVectorstoreLoader # not work
 
@@ -20,6 +23,10 @@ llm = ChatOllama(model="llama3.2")
 # llama-3.1-70b-versatile
 # llama-3.2-90b-vision-preview
 llm = ChatGroq(model="llama-3.1-70b-versatile")
+
+PINECONE_INDEX_NAME = os.environ.get('PINECONE_INDEX_NAME', 'fairfax-county-construction-code')
+EMBEDDING_MODEL = os.environ.get('EMBEDDING_MODEL', 'models/text-embedding-004')
+vectorstore = PineconeVectorStore(index_name=PINECONE_INDEX_NAME, embedding=GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL))
 
 def add_documents(documents: list[Document], new_docs: list[Document]):
   return documents + new_docs
@@ -30,11 +37,6 @@ class ResearcherInputState(TypedDict):
 class ResearcherOutputState(TypedDict):
   messages: Annotated[list[AnyMessage], add_messages]
 
-   
-# tools
-from service.consultation_company.vectorstores.vectorstore_vertexai import vector_loader
-
-
 @tool
 def vectordb_search(search_query: str):
   """Search the query from Fairfax County webpages/PDFs vectorstore db
@@ -42,8 +44,7 @@ def vectordb_search(search_query: str):
   Args:
       search_query: query to search in vectorstore db
   """
-  vectorstore = vector_loader.vectorstore
-  
+
   retriever = vectorstore.as_retriever()
   retrieved_docs = retriever.invoke(search_query)
   # return evaluate_documents(search_query, retrieved_docs)
@@ -186,7 +187,7 @@ resesarcher_agent = researcher_builder.compile()
 # display(Image(resesarcher_agent.get_graph().draw_mermaid_png()))
 
 # # %%
-# client_query = "싱글하우스 집에 애디션을 만들고 싶어. 필요한 인스펙션이 뭔지 알려줘"
+# client_query = "I want to build a addition to the single house project. What inspections do I need?"
 
 # state = {
 #   'messages': [HumanMessage(content=client_query)]
@@ -198,6 +199,3 @@ resesarcher_agent = researcher_builder.compile()
 # for m in response['messages']:
 #   m.pretty_print()
   
-# # # %%
-
-# %%

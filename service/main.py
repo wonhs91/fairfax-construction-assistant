@@ -2,8 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uuid
+from mangum import Mangum
 
-from service.consultation_company.agents import translator
+from service.consultation_company.agents.translator import translator
 
 app = FastAPI()
 
@@ -14,6 +15,8 @@ app.add_middleware(
   allow_methods=["*"]
 )
 
+handler = Mangum(app)
+
 @app.get("/")
 async def get():
   return {"message": "Welcome to Fairfax Construction World!"}
@@ -21,7 +24,7 @@ async def get():
 class ConstructionQuery(BaseModel):
   question: str
   
-@app.post("/api/fairfax-construction-assistant/")
+@app.post("/api/fairfax-construction-assistant")
 async def start_chat(req_body: ConstructionQuery):
   thread_id = str(uuid.uuid4())
   config = {"configurable": {"thread_id": thread_id}}
