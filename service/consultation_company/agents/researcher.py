@@ -182,9 +182,9 @@ researcher_builder.add_edge('ask_user', END)
 resesarcher_agent = researcher_builder.compile()
 
 # %%
-# if __name__ == "__main__":
-# from IPython.display import display, Image
-# display(Image(resesarcher_agent.get_graph().draw_mermaid_png()))
+if __name__ == "__main__":
+from IPython.display import display, Image
+display(Image(resesarcher_agent.get_graph().draw_mermaid_png()))
 
 # # %%
 # client_query = "I want to build a addition to the single house project. What inspections do I need?"

@@ -123,3 +123,6 @@ docker tag ffx-consultant-lambda:latest <account-id>.dkr.ecr.<your-region>.amazo
 ```bash
 docker push <account-id>.dkr.ecr.<your-region>.amazonaws.com/<repository-name>:latest
 ```
+
+## Sample Chat 
+![alt text](./res/construction-assistant.png)
