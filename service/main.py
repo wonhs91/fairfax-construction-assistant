@@ -4,7 +4,7 @@ from pydantic import BaseModel
 import uuid
 from mangum import Mangum
 
-from service.consultation_company.agents import translator
+from service.consultation_company.agents.translator import translator
 
 app = FastAPI()
 
@@ -24,7 +24,7 @@ async def get():
 class ConstructionQuery(BaseModel):
   question: str
   
-@app.post("/api/fairfax-construction-assistant/")
+@app.post("/api/fairfax-construction-assistant")
 async def start_chat(req_body: ConstructionQuery):
   thread_id = str(uuid.uuid4())
   config = {"configurable": {"thread_id": thread_id}}

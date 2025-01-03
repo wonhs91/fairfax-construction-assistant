@@ -7,3 +7,6 @@ scripts/*
 ffx-consultant/*
 service/consultation_company/agents/bak/*
 service/__pycache__/*
+service/ffx-consultant-prod/
+service/requirements-bak.txt
+service/__pycache__/
