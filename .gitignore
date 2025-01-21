@@ -3,7 +3,8 @@
 *pycache*
 langgraph-course-9c8529a52e6b.json
 tests/*
-scripts/*
+scripts/output/
+scripts/vectorstores/
 ffx-consultant/*
 service/consultation_company/agents/bak/*
 service/__pycache__/*

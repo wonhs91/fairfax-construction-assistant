@@ -2,7 +2,7 @@
 
 [link](http://stephen.ffx-consultant.com.s3-website-us-east-1.amazonaws.com/)
 
-A POC (Proof of Concept) AI chatbot web application desinged to interact with construction contractors and provide helpful information regarding fairfax county code and manuls. 
+AI chatbot web application desinged to interact with construction contractors and provide helpful information regarding fairfax county code and manuls. 
 
 ## Features
 - Interactive chat web interface
