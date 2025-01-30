@@ -1,6 +1,7 @@
 .env
 .vscode
 *pycache*
+__pycache__
 langgraph-course-9c8529a52e6b.json
 tests/*
 scripts/output/

@@ -10,6 +10,7 @@ from langchain_core.documents import Document
 from langchain_core.messages import AnyMessage, SystemMessage, HumanMessage, AIMessage
 from langchain_core.tools import tool
 from langgraph.graph import add_messages, StateGraph, START, END
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.constants import Send
 from langchain_community.tools import DuckDuckGoSearchResults
 from langchain_pinecone import PineconeVectorStore
@@ -19,10 +20,10 @@ import os
 
 # from vectorstores import MyVectorstoreLoader # not work
 
-llm = ChatOllama(model="llama3.2")
+# llm = ChatOllama(model="llama3.2")
 # llama-3.1-70b-versatile
 # llama-3.2-90b-vision-preview
-llm = ChatGroq(model="llama-3.1-70b-versatile")
+llm = ChatGroq(model="deepseek-r1-distill-llama-70b")
 
 PINECONE_INDEX_NAME = os.environ.get('PINECONE_INDEX_NAME', 'fairfax-county-construction-code')
 EMBEDDING_MODEL = os.environ.get('EMBEDDING_MODEL', 'models/text-embedding-004')
@@ -178,24 +179,27 @@ researcher_builder.add_conditional_edges('research_agent', tools_condition_route
 researcher_builder.add_edge('tools', 'research_agent')
 researcher_builder.add_edge('ask_user', END)
 
+memory = MemorySaver()
 
-resesarcher_agent = researcher_builder.compile()
+resesarcher_agent = researcher_builder.compile(memory)
 
 # %%
-if __name__ == "__main__":
-from IPython.display import display, Image
-display(Image(resesarcher_agent.get_graph().draw_mermaid_png()))
+# if __name__ == "__main__":
+# from IPython.display import display, Image
+# display(Image(resesarcher_agent.get_graph().draw_mermaid_png()))
 
-# # %%
+# # # %%
+# config = {'configurable': {"thread_id": 1}}
 # client_query = "I want to build a addition to the single house project. What inspections do I need?"
 
 # state = {
 #   'messages': [HumanMessage(content=client_query)]
 # }
 
-# response = resesarcher_agent.invoke(state)
+# response = resesarcher_agent.invoke(state, config=config)
   
 # # %%
 # for m in response['messages']:
 #   m.pretty_print()
   
+# %%

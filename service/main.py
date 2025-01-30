@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from langchain_core.messages import HumanMessage
 from pydantic import BaseModel
 import uuid
 from mangum import Mangum
 
-from service.consultation_company.agents.translator import translator
+# from service.consultation_company.agents.translator import translator
+from service.consultation_company.agents.researcher import resesarcher_agent
 
 app = FastAPI()
 
@@ -29,21 +31,24 @@ async def start_chat(req_body: ConstructionQuery):
   thread_id = str(uuid.uuid4())
   config = {"configurable": {"thread_id": thread_id}}
   state = {
-    "original_query": req_body.question
+    "messages": [HumanMessage(content=req_body.question)]
   }
   
-  response = translator.invoke(state, config=config)
+  response = resesarcher_agent.invoke(state, config=config)
   
-  return {"answer": response['translated_researcher_response'], "thread_id": thread_id}
+  for m in response['messages']:
+    print(m.pretty_print())
+    
+  return {"answer": response['messages'][-1], "thread_id": thread_id}
 
 
 @app.post("/api/fairfax-construction-assistant/{thread_id}")
 async def continue_chat(req_body: ConstructionQuery, thread_id: str):
   config = {"configurable": {"thread_id": thread_id}}
   state = {
-    "original_query": req_body.question
+    "messages": [HumanMessage(content=req_body.question)]
   }
   
-  response = translator.invoke(state, config=config)
+  response = resesarcher_agent.invoke(state, config=config)
   
-  return {"answer": response['translated_researcher_response'], "thread_id": thread_id}
+  return {"answer": response['messages'][-1], "thread_id": thread_id}
